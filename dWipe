@@ -1,0 +1,19 @@
+#!/bin/bash
+
+images=($(docker images | grep month | awk '{print $3 " " $4}'))
+
+
+echo ${#images[@]}
+for i in "${images[@]}"
+do
+	echo $i
+  #imageName=$(echo $i | awk '{print $1}')
+  #numberOfMonths=$(echo $i | awk '{print $2}')
+
+	#echo $imageName
+	#echo $numberOfMonths
+	#echo $i | awk '{print $1}'
+done
+
+
+#echo $images
