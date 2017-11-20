@@ -1,19 +1,25 @@
 #!/bin/bash
 
-images=($(docker images | grep month | awk '{print $3 " " $4}'))
 
+ageToRemove=1
+#
+#if [[ $1 -eq 0 ]]; then
+#	echo Age to remove was not given. Defaulting to 6
+#	ageToRemove=6
+#fi
 
-echo ${#images[@]}
-for i in "${images[@]}"
+echo "Removing images greater than $ageToRemove month(s)"
+
+count=0
+while [ $(docker images | grep month | wc -l) -ge 0 ]
 do
-	echo $i
-  #imageName=$(echo $i | awk '{print $1}')
-  #numberOfMonths=$(echo $i | awk '{print $2}')
-
-	#echo $imageName
-	#echo $numberOfMonths
-	#echo $i | awk '{print $1}'
+	imageId=$(docker images | grep month | head -1 | awk '{print $3}')
+	age=$(docker images | grep month | head -1 | awk '{print $4}')
+	if [ $age -ge $ageToRemove ]; then
+		echo Removing id: $imageId
+		docker rmi -f $imageId
+		((count++))
+	fi	
 done
 
-
-#echo $images
+echo Total number of images removed: $count
